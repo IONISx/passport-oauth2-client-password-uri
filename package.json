@@ -11,9 +11,9 @@
     "url": "http://github.com/jaredhanson/passport-oauth2-client-password-uri/issues"
   },
   "author": {
-    "name": "Jared Hanson",
-    "email": "jaredhanson@gmail.com",
-    "url": "http://www.jaredhanson.net/"
+    "name": "Bertrand Marron",
+    "email": "bertrand.marron@ionisx.com",
+    "url": "http://github.com/tusbar"
   },
   "licenses": [ {
     "type": "MIT",
