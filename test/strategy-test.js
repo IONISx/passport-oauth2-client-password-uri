@@ -11,15 +11,15 @@ vows.describe('ClientPasswordStrategy').addBatch({
       return new ClientPasswordStrategy(function(){});
     },
 
-    'should be named oauth2-client-password': function (strategy) {
-      assert.equal(strategy.name, 'oauth2-client-password');
+    'should be named oauth2-client-password-uri': function (strategy) {
+      assert.equal(strategy.name, 'oauth2-client-password-uri');
     },
   },
 
   'strategy handling a request': {
     topic: function() {
-      var strategy = new ClientPasswordStrategy(function(clientId, clientSecret, done) {
-        if (clientId == 'c1234' && clientSecret == 'shh-its-a-secret') {
+      var strategy = new ClientPasswordStrategy(function(clientId, clientSecret, redirectUri, done) {
+        if (clientId == 'c1234' && clientSecret == 'shh-its-a-secret' && redirectUri == 'http://localhost/cb') {
           done(null, { id: clientId });
         } else {
           done(null, false);
@@ -45,6 +45,7 @@ vows.describe('ClientPasswordStrategy').addBatch({
         req.body = {};
         req.body['client_id'] = 'c1234';
         req.body['client_secret'] = 'shh-its-a-secret';
+        req.body['redirect_uri'] = 'http://localhost/cb';
         process.nextTick(function () {
           strategy.authenticate(req);
         });
@@ -61,8 +62,8 @@ vows.describe('ClientPasswordStrategy').addBatch({
 
   'strategy that verifies a request with additional info': {
     topic: function() {
-      var strategy = new ClientPasswordStrategy(function(clientId, clientSecret, done) {
-        if (clientId == 'c1234' && clientSecret == 'shh-its-a-secret') {
+      var strategy = new ClientPasswordStrategy(function(clientId, clientSecret, redirectUri, done) {
+        if (clientId == 'c1234' && clientSecret == 'shh-its-a-secret' && redirectUri == 'http://localhost/cb') {
           done(null, { id: clientId }, { foo: 'bar' });
         } else {
           done(null, false);
@@ -88,6 +89,7 @@ vows.describe('ClientPasswordStrategy').addBatch({
         req.body = {};
         req.body['client_id'] = 'c1234';
         req.body['client_secret'] = 'shh-its-a-secret';
+        req.body['redirect_uri'] = 'http://localhost/cb';
         process.nextTick(function () {
           strategy.authenticate(req);
         });
@@ -107,7 +109,7 @@ vows.describe('ClientPasswordStrategy').addBatch({
 
   'strategy handling a request that is not verified': {
     topic: function() {
-      var strategy = new ClientPasswordStrategy(function(clientId, clientSecret, done) {
+      var strategy = new ClientPasswordStrategy(function(clientId, clientSecret, redirectUri, done) {
         done(null, false);
       });
       return strategy;
@@ -130,6 +132,7 @@ vows.describe('ClientPasswordStrategy').addBatch({
         req.body = {};
         req.body['client_id'] = 'c1234';
         req.body['client_secret'] = 'shh-its-a-secret';
+        req.body['redirect_uri'] = 'http://localhost/cb';
         process.nextTick(function () {
           strategy.authenticate(req);
         });
@@ -144,7 +147,7 @@ vows.describe('ClientPasswordStrategy').addBatch({
 
   'strategy that errors while verifying request': {
     topic: function() {
-      var strategy = new ClientPasswordStrategy(function(clientId, clientSecret, done) {
+      var strategy = new ClientPasswordStrategy(function(clientId, clientSecret, redirectUri, done) {
         done(new Error('something went wrong'));
       });
       return strategy;
@@ -167,6 +170,7 @@ vows.describe('ClientPasswordStrategy').addBatch({
         req.body = {};
         req.body['client_id'] = 'c1234';
         req.body['client_secret'] = 'shh-its-a-secret';
+        req.body['redirect_uri'] = 'http://localhost/cb';
         process.nextTick(function () {
           strategy.authenticate(req);
         });
@@ -184,7 +188,7 @@ vows.describe('ClientPasswordStrategy').addBatch({
 
   'strategy handling a request without a body': {
     topic: function() {
-      var strategy = new ClientPasswordStrategy(function(clientId, clientSecret, done) {
+      var strategy = new ClientPasswordStrategy(function(clientId, clientSecret, redirectUri, done) {
         done(null, false);
       });
       return strategy;
@@ -223,7 +227,7 @@ vows.describe('ClientPasswordStrategy').addBatch({
 
   'strategy handling a request without a client_id': {
     topic: function() {
-      var strategy = new ClientPasswordStrategy(function(clientId, clientSecret, done) {
+      var strategy = new ClientPasswordStrategy(function(clientId, clientSecret, redirectUri, done) {
         done(null, false);
       });
       return strategy;
@@ -262,7 +266,7 @@ vows.describe('ClientPasswordStrategy').addBatch({
 
   'strategy handling a request without a client_secret': {
     topic: function() {
-      var strategy = new ClientPasswordStrategy(function(clientId, clientSecret, done) {
+      var strategy = new ClientPasswordStrategy(function(clientId, clientSecret, redirectUri, done) {
         done(null, false);
       });
       return strategy;
@@ -307,9 +311,9 @@ vows.describe('ClientPasswordStrategy').addBatch({
 
   'strategy with passReqToCallback=true option': {
     topic: function() {
-      var strategy = new ClientPasswordStrategy({passReqToCallback:true}, function(req, clientId, clientSecret, done) {
+      var strategy = new ClientPasswordStrategy({passReqToCallback:true}, function(req, clientId, clientSecret, redirectUri, done) {
         assert.isNotNull(req);
-        if (clientId == 'c1234' && clientSecret == 'shh-its-a-secret') {
+        if (clientId == 'c1234' && clientSecret == 'shh-its-a-secret' && redirectUri == 'http://localhost/cb') {
           done(null, { id: clientId, foo: req.params.foo });
         } else {
           done(null, false);
@@ -336,6 +340,7 @@ vows.describe('ClientPasswordStrategy').addBatch({
         req.body = {};
         req.body['client_id'] = 'c1234';
         req.body['client_secret'] = 'shh-its-a-secret';
+        req.body['redirect_uri'] = 'http://localhost/cb';
         process.nextTick(function () {
           strategy.authenticate(req);
         });

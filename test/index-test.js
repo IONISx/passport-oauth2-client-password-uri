@@ -4,7 +4,7 @@ var util = require('util');
 var clientPassword = require('../lib');
 
 
-vows.describe('passport-oauth2-client-password').addBatch({
+vows.describe('passport-oauth2-client-password-uri').addBatch({
 
   'module': {
     'should export Strategy': function (x) {

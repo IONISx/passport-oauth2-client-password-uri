@@ -1,4 +1,9 @@
-# passport-oauth2-client-password
+# passport-oauth2-client-password-uri
+
+[![npm version](https://badge.fury.io/js/passport-oauth2-client-password-uri.svg)](http://badge.fury.io/js/passport-oauth2-client-password-uri)
+[![Build Status](https://secure.travis-ci.org/IONISx/passport-oauth2-client-password-uri.svg)](https://travis-ci.org/IONISx/passport-oauth2-client-password-uri)
+[![Dependencies Status](https://david-dm.org/IONISx/passport-oauth2-client-password-uri.svg)](https://david-dm.org/IONISx/passport-oauth2-client-password-uri)
+[![Dev Dependencies Status](https://david-dm.org/IONISx/passport-oauth2-client-password-uri/dev-status.svg)](https://david-dm.org/IONISx/passport-oauth2-client-password-uri#info=devDependencies)
 
 OAuth 2.0 client password authentication strategy for [Passport](https://github.com/jaredhanson/passport).
 
@@ -9,22 +14,25 @@ the token endpoint and used as an alternative to HTTP Basic authentication.
 
 ## Install
 
-    $ npm install passport-oauth2-client-password
+    $ npm install passport-oauth2-client-password-uri
 
 ## Usage
 
 #### Configure Strategy
 
 The OAuth 2.0 client password authentication strategy authenticates clients
-using a client ID and client secret.  The strategy requires a `verify` callback,
-which accepts those credentials and calls `done` providing a client.
+using a client ID, a client secret and a redirect URI.  The strategy
+requires a `verify` callback, which accepts those credentials
+and calls `done` providing a client.
 
     passport.use(new ClientPasswordStrategy(
-      function(clientId, clientSecret, done) {
+      function(clientId, clientSecret, redirectUri, done) {
         Clients.findOne({ clientId: clientId }, function (err, client) {
           if (err) { return done(err); }
           if (!client) { return done(null, false); }
-          if (client.clientSecret != clientSecret) { return done(null, false); }
+          if (client.clientSecret != clientSecret || client.redirectUri != redirectUri) {
+            return done(null, false);
+          }
           return done(null, client);
         });
       }
@@ -32,7 +40,7 @@ which accepts those credentials and calls `done` providing a client.
 
 #### Authenticate Requests
 
-Use `passport.authenticate()`, specifying the `'oauth2-client-password'`
+Use `passport.authenticate()`, specifying the `'oauth2-client-password-uri'`
 strategy, to authenticate requests.  This strategy is typically used in
 combination with HTTP Basic authentication (as provided by [passport-http](https://github.com/jaredhanson/passport-http)),
 allowing clients to include credentials in the request body.
@@ -41,8 +49,8 @@ For example, as route middleware in an [Express](http://expressjs.com/)
 application, using [OAuth2orize](https://github.com/jaredhanson/oauth2orize)
 middleware to implement the token endpoint:
 
-    app.get('/profile', 
-      passport.authenticate(['basic', 'oauth2-client-password'], { session: false }),
+    app.get('/profile',
+      passport.authenticate(['basic', 'oauth2-client-password-uri'], { session: false }),
       oauth2orize.token());
 
 ## Examples
@@ -57,8 +65,6 @@ tokens from the token endpoint.
 
     $ npm install --dev
     $ make test
-
-[![Build Status](https://secure.travis-ci.org/jaredhanson/passport-oauth2-client-password.png)](http://travis-ci.org/jaredhanson/passport-oauth2-client-password)
 
 ## Credits
 

@@ -1,14 +1,14 @@
 {
-  "name": "passport-oauth2-client-password",
-  "version": "0.1.2",
-  "description": "OAuth 2.0 client password authentication strategy for Passport.",
+  "name": "passport-oauth2-client-password-uri",
+  "version": "1.0.0",
+  "description": "OAuth 2.0 client password uri authentication strategy for Passport.",
   "keywords": ["passport", "oauth", "oauth2", "authn", "authentication", "authz", "authorization", "api"],
   "repository": {
     "type": "git",
-    "url": "git://github.com/jaredhanson/passport-oauth2-client-password.git"
+    "url": "git://github.com/jaredhanson/passport-oauth2-client-password-uri.git"
   },
   "bugs": {
-    "url": "http://github.com/jaredhanson/passport-oauth2-client-password/issues"
+    "url": "http://github.com/jaredhanson/passport-oauth2-client-password-uri/issues"
   },
   "author": {
     "name": "Jared Hanson",
@@ -28,6 +28,5 @@
   },
   "scripts": {
     "test": "NODE_PATH=lib node_modules/.bin/vows test/*-test.js"
-  },
-  "engines": { "node": ">= 0.4.0" }
+  }
 }
